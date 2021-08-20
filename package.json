@@ -1,0 +1,19 @@
+{
+  "name": "really-useless-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hhdtan/really-useless-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hhdtan/really-useless-bot/issues"
+  },
+  "homepage": "https://github.com/hhdtan/really-useless-bot#readme"
+}

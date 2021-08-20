@@ -6,7 +6,14 @@ const bot = new Discord.Client({ intents: ["GUILDS","GUILD_MEMBERS" ,"GUILD_MESS
 const token = 'ODc4Mjc3MDMwMzU2MDgyNjk4.YR-1OQ.2SNIimxyNMD--kFd51HyY9tnk0I';
 
 bot.on('ready', ()=> {
-    console.log('this bot is online');
+    console.log('online');
 });
+
+bot.on('messageCreate',msg=>{
+    if(msg.content === "hi"){
+        msg.reply("the useless bot says hi");
+    }
+});
+
 
 bot.login(token);

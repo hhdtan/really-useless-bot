@@ -1,3 +1,3 @@
 # really-useless-bot
 
-I'm sorry this is useless
+I'm sorry but this is useless

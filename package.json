@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/hhdtan/really-useless-bot/issues"
   },
-  "homepage": "https://github.com/hhdtan/really-useless-bot#readme"
+  "homepage": "https://github.com/hhdtan/really-useless-bot#readme",
+  "dependencies": {
+    "discord.js": "^13.1.0"
+  }
 }

@@ -15,5 +15,4 @@ bot.on('messageCreate',msg=>{
     }
 });
 
-
 bot.login(token);

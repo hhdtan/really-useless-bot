@@ -3,7 +3,7 @@ const cron = require('cron');
 
 const bot = new Discord.Client({ intents: ["GUILDS","GUILD_MEMBERS" ,"GUILD_MESSAGES"] });
 
-const { TOKEN } = require('./config.json');
+// const { TOKEN } = require('./config.json');
 
 const PREFIX = '!'; // bot command prefix
 
@@ -59,7 +59,7 @@ bot.on('messageCreate', msg=>{
 
 });
 
-bot.login(TOKEN);
+// bot.login(TOKEN);
 bot.login(process.env.TOKEN);
 
 function catculate(food, msg){

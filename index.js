@@ -60,6 +60,7 @@ bot.on('messageCreate', msg=>{
 });
 
 bot.login(TOKEN);
+bot.login(process.env.TOKEN);
 
 function catculate(food, msg){
     if(!isNaN(food)){

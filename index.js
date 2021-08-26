@@ -8,15 +8,17 @@ const { TOKEN } = require('./config.json');
 const PREFIX = '!'; // bot command prefix
 
 var cat = 50; 
+var misc = '';
 
 bot.on('ready', ()=> {
     console.log('bot is online');
     console.log(`cat has ${cat} grams left`);
     
-    let scheduledMessage = new cron.CronJob('49 21 * * *', () => {
+    let scheduledMessage = new cron.CronJob('00 00 * * *', () => {
         // Specifing your guild (server) and your channel
+        daily_reset();
         bot.channels.fetch('878278144497418272').then(channel => {
-            channel.send("CRON IS WORKING BITCHES");
+            channel.send(`cat is reset to 50, cat: ${cat}`);
         })
     });
     scheduledMessage.start();
@@ -34,10 +36,14 @@ bot.on('messageCreate', msg=>{
                     msg.channel.send('pong'); // sends message to channel
                     //msg.reply('pong'); uses discord reply function
                     break;
+
                 case 'feed':
                     catculate(args[1],msg);
                     break
-            // 
+                
+                case 'reset':
+                    daily_reset();
+                    break;
         }
         
         // case '@':
@@ -56,13 +62,23 @@ bot.on('messageCreate', msg=>{
 bot.login(TOKEN);
 
 function catculate(food, msg){
-    cat -= food;
-    console.log(`cat has ${cat} grams left`);
-    msg.channel.send(`cat has ${cat} grams left`);
+    if(!isNaN(food)){
+        cat -= Number(food);
+    }else{
+        misc += ' ' + food;
+    }
+    output = `cat has ${cat} grams left`
+
+    if(misc !== ''){
+        output += 'and ate some' + misc; 
+    }
+
+    console.log(output);
+    msg.channel.send(output);
 }
 
 function daily_reset(msg){
-
-    console.log('reset cat works');
-    cat = 0;
+    cat = 50;
+    misc = '';
+    msg.channel.send(`reset: cat has ${cat}g left`);
 }

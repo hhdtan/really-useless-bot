@@ -18,6 +18,9 @@ var misc = ['extra food: '];
 bot.on('ready', ()=> {
     console.log('bot is online');
     console.log(`cat has ${cat}g left`);
+    bot.channels.fetch('878278144497418272').then(channel => {
+        channel.send(`bot is awake! catgrams: ${cat}g`);
+    })
     
     // refer to https://crontab.guru/ for JS timing
     let scheduledMessage = new cron.CronJob('00 08 * * *', () => {
@@ -47,7 +50,11 @@ bot.on('messageCreate', msg=>{
                 case 'feed':
                     catculate(args[1],msg);
                     break
-                
+
+                case 'unfeed':
+                    catculate(args[1],msg, false);
+                    break
+                    
                 case 'reset':
                     daily_reset();
                     msg.channel.send(`manual reset: cat has ${cat}g left `)
@@ -84,10 +91,14 @@ bot.on('messageCreate', msg=>{
 
 });
 
-function catculate(food, msg){
+function catculate(food, msg, feed = true){
     // checks for number or text, isNaN returns FALSE if number
     if(!isNaN(food)){
-        cat -= Number(food);
+        if(feed == true){
+            cat -= Number(food);
+        }else{
+            cat += Number(food);
+        }
     }else{
         misc.push(food);
     }
@@ -102,13 +113,16 @@ function catculate(food, msg){
         // inelegant string processing...
         output += `, ${misc[0]}`;
         for(i = 1; i < misc.length; i++){
-            console.log(`looping ${i}`);
             output += ' ' + `${i}. ` + misc[i];
         }        
     }
 
     console.log(output);
     msg.channel.send(output);
+
+    if(cat < 0 ){
+        msg.channel.send(`fat po has exceeded daily quota by ${-cat}g!`);
+    }
 }
 
 function daily_reset(){

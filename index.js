@@ -20,7 +20,7 @@ bot.on('ready', ()=> {
     console.log(`cat has ${cat}g left`);
     
     // refer to https://crontab.guru/ for JS timing
-    let scheduledMessage = new cron.CronJob('00 00 * * *', () => {
+    let scheduledMessage = new cron.CronJob('00 08 * * *', () => {
         // specifing guild (server) and channel ID (enable developer settings in discord and copy ID)
         daily_reset();
         // cat 826449405770203157 dummy 878278144497418272

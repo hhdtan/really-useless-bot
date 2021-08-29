@@ -4,11 +4,11 @@ const cron = require('cron');
 const bot = new Discord.Client({ intents: ["GUILDS","GUILD_MEMBERS" ,"GUILD_MESSAGES"] });
 
 // LOCAL
-const { TOKEN } = require('./config.json'); 
-bot.login(TOKEN);
+// const { TOKEN } = require('./config.json'); 
+// bot.login(TOKEN);
 
 // // HEROKU 
-// bot.login(process.env.TOKEN);
+bot.login(process.env.TOKEN);
 
 const PREFIX = '!'; // bot command prefix
 
@@ -20,7 +20,7 @@ bot.on('ready', ()=> {
     console.log(`cat has ${cat} grams left`);
     
     let scheduledMessage = new cron.CronJob('00 00 * * *', () => {
-        // Specifing your guild (server) and your channel
+        // specifing guild (server) and channel ID (enable developer settings in discord and copy ID)
         daily_reset();
         bot.channels.fetch('878278144497418272').then(channel => {
             channel.send(`cat is reset to 50, cat: ${cat}`);
@@ -50,11 +50,22 @@ bot.on('messageCreate', msg=>{
                     daily_reset();
                     break;
 
-                case 'del':
-                    msg.channel.send(`deleting ${misc[Number(args[1])]}`);
-                    misc.splice(Number(args[1]),1);
-                    console.log(misc);
-                    catculate(0,msg);
+                case 'del': 
+                    try {
+                        if(args[1] <= 0 || args[1] >= misc.length ){
+                            throw `index no. ${args[1]} is out of bounds`;
+                        }
+
+                        if( isNaN( Number(args[1]) ) ){
+                            throw `delete won't work because ${args[1]} is a string`;
+                        }
+                        msg.channel.send(`deleting ${misc[Number(args[1])]}`);
+                        misc.splice(Number(args[1]),1);
+                        catculate(0,msg);
+                    } catch (error) {
+                        msg.channel.send(error);
+                    }
+                    
         }
         
         // case '@':
@@ -71,10 +82,10 @@ bot.on('messageCreate', msg=>{
 });
 
 function catculate(food, msg){
+    // checks for number or text, isNaN returns FALSE if number
     if(!isNaN(food)){
         cat -= Number(food);
     }else{
-        // txt = misc.length + '. ' + food; 
         misc.push(food);
     }
     output = `cat has ${cat} grams left`;
@@ -84,15 +95,13 @@ function catculate(food, msg){
     // length = final index + 1 
 
     if(misc.length != 1){   // check if we have entries or not
+
+        // inelegant string processing...
         output += `, ${misc[0]}`;
         for(i = 1; i < misc.length; i++){
             console.log(`looping ${i}`);
             output += ' ' + `${i}. ` + misc[i];
-
-        }
-
-
-        
+        }        
     }
 
     console.log(output);
@@ -101,6 +110,6 @@ function catculate(food, msg){
 
 function daily_reset(msg){
     cat = 50;
-    misc = '';
+    misc = ['extra food: '];
     msg.channel.send(`reset: cat has ${cat}g left`);
 }

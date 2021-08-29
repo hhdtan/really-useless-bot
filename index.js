@@ -17,13 +17,15 @@ var misc = ['extra food: '];
 
 bot.on('ready', ()=> {
     console.log('bot is online');
-    console.log(`cat has ${cat} grams left`);
+    console.log(`cat has ${cat}g left`);
     
+    // refer to https://crontab.guru/ for JS timing
     let scheduledMessage = new cron.CronJob('00 00 * * *', () => {
         // specifing guild (server) and channel ID (enable developer settings in discord and copy ID)
         daily_reset();
+        // cat 826449405770203157 dummy 878278144497418272
         bot.channels.fetch('878278144497418272').then(channel => {
-            channel.send(`cat is reset to 50, cat: ${cat}`);
+            channel.send(`cat is reset to 50, cat: ${cat}g`);
         })
     });
     scheduledMessage.start();
@@ -48,6 +50,7 @@ bot.on('messageCreate', msg=>{
                 
                 case 'reset':
                     daily_reset();
+                    msg.channel.send(`manual reset: cat has ${cat}g left `)
                     break;
 
                 case 'del': 
@@ -88,7 +91,7 @@ function catculate(food, msg){
     }else{
         misc.push(food);
     }
-    output = `cat has ${cat} grams left`;
+    output = `cat has ${cat}g left`;
 
     // misc index 0 is the initial string, subsequent entries start from 1,2,3...
     // length of misc is minimum 1, if length is 2+ then there's an entry
@@ -108,8 +111,7 @@ function catculate(food, msg){
     msg.channel.send(output);
 }
 
-function daily_reset(msg){
+function daily_reset(){
     cat = 50;
     misc = ['extra food: '];
-    msg.channel.send(`reset: cat has ${cat}g left`);
 }

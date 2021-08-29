@@ -3,12 +3,17 @@ const cron = require('cron');
 
 const bot = new Discord.Client({ intents: ["GUILDS","GUILD_MEMBERS" ,"GUILD_MESSAGES"] });
 
-// const { TOKEN } = require('./config.json');
+// LOCAL
+const { TOKEN } = require('./config.json'); 
+bot.login(TOKEN);
+
+// // HEROKU 
+// bot.login(process.env.TOKEN);
 
 const PREFIX = '!'; // bot command prefix
 
 var cat = 50; 
-var misc = '';
+var misc = ['extra food: '];
 
 bot.on('ready', ()=> {
     console.log('bot is online');
@@ -44,6 +49,12 @@ bot.on('messageCreate', msg=>{
                 case 'reset':
                     daily_reset();
                     break;
+
+                case 'del':
+                    msg.channel.send(`deleting ${misc[Number(args[1])]}`);
+                    misc.splice(Number(args[1]),1);
+                    console.log(misc);
+                    catculate(0,msg);
         }
         
         // case '@':
@@ -59,19 +70,29 @@ bot.on('messageCreate', msg=>{
 
 });
 
-// bot.login(TOKEN);
-bot.login(process.env.TOKEN);
-
 function catculate(food, msg){
     if(!isNaN(food)){
         cat -= Number(food);
     }else{
-        misc += ' ' + food;
+        // txt = misc.length + '. ' + food; 
+        misc.push(food);
     }
-    output = `cat has ${cat} grams left`
+    output = `cat has ${cat} grams left`;
 
-    if(misc !== ''){
-        output += 'and ate some' + misc; 
+    // misc index 0 is the initial string, subsequent entries start from 1,2,3...
+    // length of misc is minimum 1, if length is 2+ then there's an entry
+    // length = final index + 1 
+
+    if(misc.length != 1){   // check if we have entries or not
+        output += `, ${misc[0]}`;
+        for(i = 1; i < misc.length; i++){
+            console.log(`looping ${i}`);
+            output += ' ' + `${i}. ` + misc[i];
+
+        }
+
+
+        
     }
 
     console.log(output);

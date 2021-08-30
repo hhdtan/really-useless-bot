@@ -22,8 +22,8 @@ bot.on('ready', ()=> {
         channel.send(`bot is awake! catgrams: ${cat}g`);
     })
     
-    // refer to https://crontab.guru/ for JS timing
-    let scheduledMessage = new cron.CronJob('00 00 * * *', () => {
+    // refer to https://crontab.guru/ for JS timing, timezone is in UTC, malaysia to utc = malaysia - 8
+    let scheduledMessage = new cron.CronJob('00 16 * * *', () => {
         // specifing guild (server) and channel ID (enable developer settings in discord and copy ID)
         daily_reset();
         // cat 826449405770203157 dummy 878278144497418272
@@ -94,10 +94,15 @@ bot.on('messageCreate', msg=>{
 function catculate(food, msg, feed = true){
     // checks for number or text, isNaN returns FALSE if number
     if(!isNaN(food)){
-        if(feed == true){
-            cat -= Number(food);
-        }else{
-            cat += Number(food);
+        if ( Number(food) > 75 ){
+            msg.channel.send("kau jangan chibai");
+        }
+        else{
+            if(feed == true){
+                cat -= Number(food);
+            }else{
+                cat += Number(food);
+            }
         }
     }else{
         misc.push(food);
